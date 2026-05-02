@@ -3,12 +3,15 @@ import { YogaViewModel } from '../viewmodel/YogaViewModel';
 import { image } from '@kit.ImageKit';
 import { common } from '@kit.AbilityKit';
 import { ImageBlur } from '../utils/ImageBlur';
+import { CalendarService } from '../services/CalendarService';
 
 @Component
 export struct HomePage {
   yogaVm: YogaViewModel = new YogaViewModel();
   @State imagePixelMap: image.PixelMap | null = null;
+  @State streak: number = 0;
   private imageBuffer: ArrayBuffer | undefined = undefined;
+  private calendar: CalendarService = CalendarService.getInstance();
 
   async getFileBuffer(): Promise<ArrayBuffer | undefined> {
     try {
@@ -23,10 +26,10 @@ export struct HomePage {
 
   async aboutToAppear(): Promise<void> {
     this.imageBuffer = await this.getFileBuffer();
-    if (this.imageBuffer === undefined) {
-      return;
+    if (this.imageBuffer !== undefined) {
+      this.imagePixelMap = await ImageBlur(this.imageBuffer);
     }
-    this.imagePixelMap = await ImageBlur(this.imageBuffer);
+    this.streak = await this.calendar.getWeeklyStreak();
   }
 
   build() {
@@ -37,14 +40,14 @@ export struct HomePage {
           label: 'Training',
           position: ArcButtonPosition.TOP_EDGE,
           styleMode: ArcButtonStyleMode.CUSTOM,
-          backgroundColor: ColorMetrics.resourceColor('#ffa75d1c'),
+          backgroundColor: ColorMetrics.resourceColor($r('app.color.button')),
           onClick: () => {
             this.yogaVm.navigateToPage('TrainingPage')
           }
         })
       })
         .zIndex(2)
-        .offset({x: 0, y: -90})
+        .offset({ x: 0, y: -90 })
 
       Column({ space: 8 }) {
         Text('CALMYOGA')
@@ -56,8 +59,17 @@ export struct HomePage {
         Text('Find Your Calm')
           .fontSize(14)
           .fontWeight(FontWeight.Bolder)
-          .fontColor('#ffeceaea')
+          .fontColor($r('app.color.light_gray'))
           .textAlign(TextAlign.Center)
+
+        if (this.streak >= 0) {
+          Text(`${this.streak} 🔥`)
+            .fontSize(20)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(Color.Orange)
+            .textAlign(TextAlign.Center)
+            .margin({ top: 5 })
+        }
       }
       .zIndex(2)
 
@@ -72,13 +84,13 @@ export struct HomePage {
           label: 'Go to Yoga',
           position: ArcButtonPosition.BOTTOM_EDGE,
           styleMode: ArcButtonStyleMode.CUSTOM,
-          backgroundColor: ColorMetrics.resourceColor('#ffa75d1c'),
+          backgroundColor: ColorMetrics.resourceColor($r('app.color.button')),
           onClick: () => {
             this.yogaVm.navigateToPage('YogaPage')
           }
         })
       })
-        .offset({x: 0, y: 90})
+        .offset({ x: 0, y: 90 })
         .zIndex(2)
     }
     .height('100%')

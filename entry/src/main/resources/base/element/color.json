@@ -11,6 +11,14 @@
     {
       "name": "base_background_gradient_start",
       "value": "#FF000000"
+    },
+    {
+      "name": "button",
+      "value": "#ffa75d1c"
+    },
+    {
+      "name": "light_gray",
+      "value": "#ffeceaea"
     }
   ]
 }

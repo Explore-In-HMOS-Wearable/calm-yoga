@@ -9,6 +9,8 @@ export struct TrainingPage {
   yogaVm: YogaViewModel = new YogaViewModel();
   swiperIndex: number = 0
   @State slides: YogaModel[] = []
+  private crownAccumulator: number = 0;
+  private readonly CROWN_SENSITIVITY: number = 30;
 
   aboutToAppear(): void {
     this.slides = YOGA_TRAINING
@@ -37,7 +39,7 @@ export struct TrainingPage {
           label: 'Back',
           position: ArcButtonPosition.TOP_EDGE,
           styleMode: ArcButtonStyleMode.CUSTOM,
-          backgroundColor: ColorMetrics.resourceColor('#ffa75d1c'),
+          backgroundColor: ColorMetrics.resourceColor($r('app.color.button')),
           onClick: () => {
             this.yogaVm.navigationService.pageInfos.pop()
           }
@@ -49,9 +51,24 @@ export struct TrainingPage {
       ArcSwiper(this.wearableSwiperController) {
         ForEach(this.slides, (y: YogaModel, index: number) => {
           this.SlideView(y)
-        }, (item: string, index: number) => item)
+        }, (item: YogaModel, index: number) => item.title)
       }
-      .index(this.swiperIndex)
+      .focusable(true)
+      .focusOnTouch(true)
+      .defaultFocus(true)
+      .onDigitalCrown((event: CrownEvent) => {
+        event.stopPropagation();
+        this.crownAccumulator += event.degree;
+
+        if (Math.abs(this.crownAccumulator) >= this.CROWN_SENSITIVITY) {
+          if (this.crownAccumulator > 0) {
+            this.wearableSwiperController.showNext();
+          } else if (this.crownAccumulator < 0) {
+            this.wearableSwiperController.showPrevious();
+          }
+          this.crownAccumulator = 0;
+        }
+      })
     }
     .backgroundColor(Color.White)
     .width('100%')

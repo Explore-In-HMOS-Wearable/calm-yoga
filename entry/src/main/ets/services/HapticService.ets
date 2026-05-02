@@ -1,10 +1,8 @@
 import vibrator from '@ohos.vibrator';
 
-
 type VibrateUsage = 'unknown' | 'notification' | 'ring' | 'alarm';
 interface VibrateAttribute { usage: VibrateUsage }
 interface TimeVibrateEffect { type: 'time'; duration: number }
-
 
 export class HapticService {
   async vibrate(ms: number): Promise<void> {

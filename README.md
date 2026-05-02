@@ -1,5 +1,3 @@
-> **Note:** To access all shared projects, get information about environment setup, and view other guides, please visit [Explore-In-HMOS-Wearable Index](https://github.com/Explore-In-HMOS-Wearable/hmos-index).
-
 # CalmYoga
 
 CalmYoga is an interactive yoga companion application specifically designed for HarmonyOS wearables. It aims to provide a seamless and mindful yoga experience by combining visual training with physical haptic feedbacks.
@@ -14,7 +12,6 @@ CalmYoga is an interactive yoga companion application specifically designed for 
 
 </div>
 
-
 # Use Cases
 
 - CalmYoga offers a dual-layered approach to mindfulness: Interactive Training and Session Management.
@@ -25,8 +22,12 @@ CalmYoga is an interactive yoga companion application specifically designed for 
 
 - Haptic Feedback: To ensure a truly "calm" experience, the app utilizes the @ohos.vibrator kit to provide subtle haptic feedback during pose transitions. These vibrations serve as non-intrusive alerts, allowing users to keep their eyes closed or focus on their posture while knowing exactly when to move to the next step.
 
-# Tech Stack
+- Streak Tracking & Notifications: CalmYoga now tracks your weekly consistency using the Calendar Kit, displaying your current streak on the home screen.
 
+- Digital Crown Support: Navigate through yoga training slides effortlessly using your wearable's digital crown.
+
+# Technology
+## Stack
 
 **Languages**: ArkTS
 
@@ -41,7 +42,11 @@ CalmYoga is an interactive yoga companion application specifically designed for 
 - `@kit.ArkUI`
 - `@kit.AbilityKit`
 - `@ohos.vibrator`
+- `@kit.CalendarKit`
 
+## Required Permissions
+- `ohos.permission.READ_CALENDAR`
+- `ohos.permission.WRITE_CALENDAR`
 
 # Directory Structure
 ```
@@ -66,6 +71,7 @@ entry/src/main/
 │   │
 │   ├── services/
 │   │   ├── HapticService.ets
+│   │   ├── CalenderService.ets
 │   │   └── NavigationService.ets
 │   │
 │   ├── utils/
@@ -77,12 +83,10 @@ entry/src/main/
 ├── resources/
 ```
 
-
 # Constraints and Restrictions
 
 ## Supported Device
 - Huawei Watch 5
-
 
 # License
 
